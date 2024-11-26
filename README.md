@@ -79,7 +79,7 @@ I spent approximately 4 hours on this assignment, broken down as follows:
 npm install
 
 # Start development server
-npm run dev
+npm run dev:all
 
 # Run tests
 npm run test

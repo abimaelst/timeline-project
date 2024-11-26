@@ -27,10 +27,7 @@ export class TimelineService {
 
   static async updateTimelineItem(item: TimelineItem): Promise<TimelineItem> {
     try {
-      const response = await axios.put<TimelineItem>(
-          `${API_URL}/timeline/${item.id}`,
-          item
-      );
+      const response = await axios.put<TimelineItem>(`${API_URL}/timeline/${item.id}`, item);
       return response.data;
     } catch (error) {
       throw this.handleError(error, 'Failed to update timeline item');
@@ -39,10 +36,7 @@ export class TimelineService {
 
   static async createTimelineItem(item: Omit<TimelineItem, 'id'>): Promise<TimelineItem> {
     try {
-      const response = await axios.post<TimelineItem>(
-          `${API_URL}/timeline`,
-          item
-      );
+      const response = await axios.post<TimelineItem>(`${API_URL}/timeline`, item);
       return response.data;
     } catch (error) {
       throw this.handleError(error, 'Failed to create timeline item');
@@ -59,11 +53,11 @@ export class TimelineService {
 
   static async batchUpdateTimelineItems(items: TimelineItem[]): Promise<TimelineItem[]> {
     try {
-      const updatePromises = items.map(item =>
-          axios.put<TimelineItem>(`${API_URL}/timeline/${item.id}`, item)
+      const updatePromises = items.map((item) =>
+        axios.put<TimelineItem>(`${API_URL}/timeline/${item.id}`, item)
       );
       const responses = await Promise.all(updatePromises);
-      return responses.map(response => response.data);
+      return responses.map((response) => response.data);
     } catch (error) {
       throw this.handleError(error, 'Failed to batch update timeline items');
     }

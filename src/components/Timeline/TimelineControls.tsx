@@ -8,9 +8,9 @@ interface TimelineControlsProps {
   onRedo?: () => void;
 }
 
-const MIN_ZOOM = 1
-const MAX_ZOOM = 3
-const ZOOM_STEP = 0.5
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 3;
+const ZOOM_STEP = 0.5;
 
 export const TimelineControls: React.FC<TimelineControlsProps> = ({
   zoomLevel,

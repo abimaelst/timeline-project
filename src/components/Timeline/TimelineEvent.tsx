@@ -3,7 +3,7 @@ import { GripHorizontalIcon } from 'lucide-react';
 import { TimelineItem } from '../../types/timeline';
 import { formatDateRange } from '../../utils/dateUtils';
 import { EditableEventName } from './EditableEventName';
-import {SyntheticListenerMap} from "@dnd-kit/core/dist/hooks/utilities";
+import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 
 interface TimelineEventProps {
   item: TimelineItem;

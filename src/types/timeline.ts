@@ -20,5 +20,3 @@ export interface TimelineState {
 }
 
 export type TimelineLane = TimelineItem[];
-
-
