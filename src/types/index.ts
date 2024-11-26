@@ -1,3 +1,3 @@
-import {TimelineItem} from './timeline.ts'
+import { TimelineItem } from './timeline.ts';
 
-export type {TimelineItem}
+export type { TimelineItem };
