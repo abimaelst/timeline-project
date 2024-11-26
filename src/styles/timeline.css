@@ -1,0 +1,71 @@
+@layer components {
+    .tooltip {
+        --tooltip-color: hsl(var(--in));
+        --tooltip-text-color: hsl(var(--inc, var(--nc)));
+        --tooltip-tail-offset: calc(100% + 1px);
+        --tooltip-tail-size: 6px;
+        --tooltip-offset: calc(100% + var(--tooltip-tail-size));
+        position: relative;
+        display: inline-block;
+    }
+
+    .tooltip:before {
+        position: absolute;
+        pointer-events: none;
+        z-index: 2000;
+        content: attr(data-tip);
+        @apply whitespace-pre-line;
+        @apply max-w-xs;
+        @apply text-xs;
+        @apply py-2 px-3;
+        @apply leading-tight;
+        @apply rounded;
+        @apply opacity-0;
+        background-color: var(--tooltip-color);
+        color: var(--tooltip-text-color);
+        transition-property: transform, visibility, opacity;
+        transition-duration: 200ms;
+    }
+
+    .tooltip:after {
+        position: absolute;
+        z-index: 2000;
+        content: "";
+        border-style: solid;
+        border-width: var(--tooltip-tail-size);
+        width: 0;
+        height: 0;
+        display: block;
+        @apply opacity-0;
+        transition-property: transform, visibility, opacity;
+        transition-duration: 200ms;
+    }
+
+    .tooltip-top:before {
+        bottom: var(--tooltip-tail-offset);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .tooltip-top:after {
+        bottom: calc(var(--tooltip-tail-offset) - var(--tooltip-tail-size));
+        left: 50%;
+        transform: translateX(-50%);
+        border-color: var(--tooltip-color) transparent transparent transparent;
+    }
+
+    .tooltip:hover:before,
+    .tooltip:hover:after {
+        @apply opacity-100;
+    }
+
+    .timeline-event:hover {
+        @apply z-50;
+    }
+
+    @media (min-width: 768px) {
+        .tooltip:before {
+            @apply text-sm;
+        }
+    }
+}

@@ -1,14 +1,14 @@
 import React from 'react';
-import { format, parseISO } from 'date-fns';
 import { GripHorizontalIcon } from 'lucide-react';
-import { TimelineItem } from '../types';
-import {SyntheticListenerMap} from "@dnd-kit/core/dist/hooks/utilities";
+import { TimelineItem } from '../../types/timeline';
+import { formatDateRange } from '../../utils/dateUtils';
+import { EditableEventName } from './EditableEventName';
 
 interface TimelineEventProps {
     item: TimelineItem;
     style: React.CSSProperties;
     isDragging?: boolean;
-    dragHandleProps?:  SyntheticListenerMap | undefined;
+    dragHandleProps?: any;
 }
 
 export const TimelineEvent: React.FC<TimelineEventProps> = ({
@@ -17,12 +17,7 @@ export const TimelineEvent: React.FC<TimelineEventProps> = ({
                                                                 isDragging = false,
                                                                 dragHandleProps,
                                                             }) => {
-    const formattedDateRange = `${format(parseISO(item.start), 'MMM d, yyyy')} - ${format(
-        parseISO(item.end),
-        'MMM d, yyyy'
-    )}`;
-
-    const tooltipContent = `${item.name}\n${formattedDateRange}`;
+    const tooltipContent = `${item.name}\n${formatDateRange(item.start, item.end)}`;
 
     return (
         <div
@@ -31,7 +26,7 @@ export const TimelineEvent: React.FC<TimelineEventProps> = ({
             className={`
         relative
         tooltip
-        tooltip-secondary 
+        tooltip-secondary
         tooltip-top
         bg-primary 
         text-primary-content 
@@ -44,19 +39,12 @@ export const TimelineEvent: React.FC<TimelineEventProps> = ({
         ${isDragging ? 'opacity-70 cursor-grabbing' : 'opacity-100 cursor-grab'}
       `}
         >
-
             <div className="flex flex-col h-full">
-
                 <div className="flex justify-between items-center mb-1">
-          <span className="text-xs text-primary-content/70 whitespace-nowrap">
-            {format(parseISO(item.start), 'MMM d')}
-          </span>
-                    <span className="text-xs text-primary-content/70 whitespace-nowrap">
-            {format(parseISO(item.end), 'MMM d')}
+          <span className="text-xs text-primary-content/70 whitespace-nowrap max-w-xs truncate">
+            {formatDateRange(item.start, item.start)}
           </span>
                 </div>
-
-
                 <div className="flex items-center min-w-0">
                     <div
                         {...dragHandleProps}
@@ -65,9 +53,7 @@ export const TimelineEvent: React.FC<TimelineEventProps> = ({
                         <GripHorizontalIcon size={12} className="opacity-50 group-hover:opacity-100" />
                     </div>
                     <div className="min-w-0 flex-1">
-            <span className="block truncate">
-              {item.name}
-            </span>
+                        <EditableEventName name={item.name} />
                     </div>
                 </div>
             </div>

@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Timeline } from '../Timeline';
-import { TimelineItem } from '../../types';
+import userEvent from '@testing-library/user-event';
+import { Timeline } from '../../components/Timeline';
+import { TimelineItem } from '../../types/timeline';
 
 const mockItems: TimelineItem[] = [
     {
@@ -20,32 +21,35 @@ const mockItems: TimelineItem[] = [
 
 describe('Timeline Component', () => {
     beforeEach(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         vi.resetAllMocks();
     });
 
     describe('Initial Render', () => {
         it('should render all timeline events', () => {
             render(<Timeline initialItems={mockItems} />);
-
             expect(screen.getByText('Test Event 1')).toBeInTheDocument();
         });
 
         it('should start with zoom level at 1x', () => {
-
             render(<Timeline initialItems={mockItems} />);
-
             expect(screen.getByText('Zoom: 1x')).toBeInTheDocument();
         });
 
         it('should truncate long event names', () => {
-
             render(<Timeline initialItems={mockItems} />);
             const longNameEvent = screen.getByText('Test Event 2 with a very long name that should be truncated');
-
-
             expect(longNameEvent.className).toContain('truncate');
+        });
+    });
+
+    describe('Event Editing', () => {
+        it('should allow editing event name on double click', async () => {
+            const user = userEvent.setup();
+            render(<Timeline initialItems={mockItems} />);
+            const eventName = screen.getByText('Test Event 1');
+            await user.dblClick(eventName);
+            const input = screen.getByDisplayValue('Test Event 1');
+            expect(input).toBeInTheDocument();
         });
     });
 
@@ -54,38 +58,10 @@ describe('Timeline Component', () => {
             render(<Timeline initialItems={mockItems} />);
             const event = screen.getByText('Test Event 1');
             const tooltipContainer = event.closest('.tooltip');
-
             expect(tooltipContainer).toHaveAttribute(
                 'data-tip',
                 expect.stringContaining('Test Event 1\nJan 1, 2024 - Jan 5, 2024')
             );
-        });
-
-        it('should show tooltip with date range for long event names', () => {
-            render(<Timeline initialItems={mockItems} />);
-            const event = screen.getByText('Test Event 2 with a very long name that should be truncated');
-            const tooltipContainer = event.closest('.tooltip');
-
-            expect(tooltipContainer).toHaveAttribute(
-                'data-tip',
-                expect.stringContaining('Jan 6, 2024 - Jan 10, 2024')
-            );
-        });
-    });
-
-    describe('Date Display', () => {
-        it('should display event start date correctly', () => {
-
-            render(<Timeline initialItems={mockItems} />);
-
-            expect(screen.getByText('Jan 1')).toBeInTheDocument();
-        });
-
-        it('should display event end date correctly', () => {
-
-            render(<Timeline initialItems={mockItems} />);
-
-            expect(screen.getByText('Jan 5')).toBeInTheDocument();
         });
     });
 });

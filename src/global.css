@@ -6,3 +6,8 @@ body {
   @apply bg-base-200;
 }
 
+@layer components {
+  .timeline-container {
+    @apply relative bg-base-100 rounded-box shadow-lg;
+  }
+}

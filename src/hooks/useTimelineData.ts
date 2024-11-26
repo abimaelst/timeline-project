@@ -1,28 +1,39 @@
-import { useState, useEffect } from 'react';
-import { TimelineItem } from '../types';
-import { TimelineService } from '../services/timelineService.ts';
+import { useState, useCallback } from 'react';
+import { TimelineItem } from '../types/timeline';
 
 export const useTimelineData = (initialItems: TimelineItem[] = []) => {
-  const [items, setItems] = useState<TimelineItem[]>(initialItems);
-  const [isLoading, setIsLoading] = useState(false);
+    const [items, setItems] = useState<TimelineItem[]>(initialItems);
+    const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      setIsLoading(true);
-      try {
-        const fetchedItems = await TimelineService.getTimelineItems();
-        setItems(fetchedItems);
-      } catch (error) {
-        console.error('Failed to fetch timeline items:', error);
-      } finally {
-        setIsLoading(false);
-      }
+    const updateItem = useCallback((updatedItem: TimelineItem) => {
+        setItems((prevItems) =>
+            prevItems.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+        );
+    }, []);
+
+    const updateItemDates = useCallback((id: number, start: string, end: string) => {
+        setItems((prevItems) =>
+            prevItems.map((item) =>
+                item.id === id ? { ...item, start, end } : item
+            )
+        );
+    }, []);
+
+    const updateItemName = useCallback((id: number, name: string) => {
+        setItems((prevItems) =>
+            prevItems.map((item) =>
+                item.id === id ? { ...item, name } : item
+            )
+        );
+    }, []);
+
+    return {
+        items,
+        setItems,
+        selectedId,
+        setSelectedId,
+        updateItem,
+        updateItemDates,
+        updateItemName,
     };
-
-    if (initialItems.length === 0) {
-      fetchItems();
-    }
-  }, []);
-
-  return { items, setItems, isLoading };
 };
