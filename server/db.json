@@ -1,0 +1,46 @@
+{
+  "timeline": [
+    {
+      "id": 1,
+      "start": "2024-01-01",
+      "end": "2024-01-05",
+      "name": "Project Kickoff"
+    },
+    {
+      "id": 2,
+      "start": "2024-01-01",
+      "end": "2024-01-07",
+      "name": "Design Phase"
+    },
+    {
+      "id": 3,
+      "start": "2024-01-02",
+      "end": "2024-01-09",
+      "name": "Development Sprint 1"
+    },
+    {
+      "id": 4,
+      "start": "2024-02-20",
+      "end": "2024-02-20",
+      "name": "Sprint Review"
+    },
+    {
+      "id": 5,
+      "start": "2024-01-05",
+      "end": "2024-01-19",
+      "name": "Development Sprint 2"
+    },
+    {
+      "id": 6,
+      "start": "2024-01-04",
+      "end": "2024-02-08",
+      "name": "Quality Assurance Phase"
+    },
+    {
+      "id": 7,
+      "start": "2024-01-04",
+      "end": "2024-01-05",
+      "name": "Client Demo"
+    }
+  ]
+}

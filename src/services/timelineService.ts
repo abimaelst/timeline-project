@@ -1,102 +1,71 @@
-import axios from 'axios';
-import { TimelineItem } from '../types';
+import axios, { AxiosError } from 'axios';
+import { TimelineItem } from '../types/timeline';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
-export const TimelineService = {
-  async getTimelineItems(): Promise<TimelineItem[]> {
+export class TimelineService {
+  private static handleError(error: unknown, context: string) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 404) {
+        throw new Error(`${context}: Item not found`);
+      }
+      throw new Error(`${context}: ${axiosError.message}`);
+    }
+    throw error;
+  }
+
+  static async getTimelineItems(): Promise<TimelineItem[]> {
     try {
-      const response = await axios.get<TimelineItem[]>(`${API_BASE_URL}/timeline-items`);
+      const response = await axios.get<TimelineItem[]>(`${API_URL}/timeline`);
       return response.data;
     } catch (error) {
-      console.error('Error fetching timeline items:', error);
-
-      return [
-        {
-          id: 1,
-          start: '2021-01-01',
-          end: '2021-01-05',
-          name: 'First item',
-        },
-        {
-          id: 2,
-          start: '2021-01-02',
-          end: '2021-01-08',
-          name: 'Second item',
-        },
-        {
-          id: 3,
-          start: '2021-01-06',
-          end: '2021-01-13',
-          name: 'Another item',
-        },
-        {
-          id: 4,
-          start: '2021-01-14',
-          end: '2021-01-14',
-          name: 'Another item',
-        },
-        {
-          id: 5,
-          start: '2021-02-01',
-          end: '2021-02-15',
-          name: 'Third item',
-        },
-        {
-          id: 6,
-          start: '2021-01-12',
-          end: '2021-02-16',
-          name: 'Fourth item with a super long name',
-        },
-        {
-          id: 7,
-          start: '2021-02-01',
-          end: '2021-02-02',
-          name: 'Fifth item with a super long name',
-        },
-        {
-          id: 8,
-          start: '2021-01-03',
-          end: '2021-01-05',
-          name: 'First item',
-        },
-        {
-          id: 9,
-          start: '2021-01-04',
-          end: '2021-01-08',
-          name: 'Second item',
-        },
-        {
-          id: 10,
-          start: '2021-01-06',
-          end: '2021-01-13',
-          name: 'Another item',
-        },
-        {
-          id: 11,
-          start: '2021-01-09',
-          end: '2021-01-09',
-          name: 'Another item',
-        },
-        {
-          id: 12,
-          start: '2021-02-01',
-          end: '2021-02-15',
-          name: 'Third item',
-        },
-        {
-          id: 13,
-          start: '2021-01-12',
-          end: '2021-02-16',
-          name: 'Fourth item with a super long name',
-        },
-        {
-          id: 14,
-          start: '2021-02-01',
-          end: '2021-02-02',
-          name: 'Fifth item with a super long name',
-        },
-      ];
+      this.handleError(error, 'Failed to fetch timeline items');
+      return []; // Fallback empty array
     }
-  },
-};
+  }
+
+  static async updateTimelineItem(item: TimelineItem): Promise<TimelineItem> {
+    try {
+      const response = await axios.put<TimelineItem>(
+          `${API_URL}/timeline/${item.id}`,
+          item
+      );
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error, 'Failed to update timeline item');
+    }
+  }
+
+  static async createTimelineItem(item: Omit<TimelineItem, 'id'>): Promise<TimelineItem> {
+    try {
+      const response = await axios.post<TimelineItem>(
+          `${API_URL}/timeline`,
+          item
+      );
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error, 'Failed to create timeline item');
+    }
+  }
+
+  static async deleteTimelineItem(id: number): Promise<void> {
+    try {
+      await axios.delete(`${API_URL}/timeline/${id}`);
+    } catch (error) {
+      throw this.handleError(error, 'Failed to delete timeline item');
+    }
+  }
+
+  static async batchUpdateTimelineItems(items: TimelineItem[]): Promise<TimelineItem[]> {
+    try {
+      const updatePromises = items.map(item =>
+          axios.put<TimelineItem>(`${API_URL}/timeline/${item.id}`, item)
+      );
+      const responses = await Promise.all(updatePromises);
+      return responses.map(response => response.data);
+    } catch (error) {
+      throw this.handleError(error, 'Failed to batch update timeline items');
+    }
+  }
+}

@@ -6,8 +6,10 @@ export interface TimelineItem {
 }
 
 export interface TimelineProps {
-  initialItems?: TimelineItem[];
+  initialItems: TimelineItem[];
   onItemUpdate?: (items: TimelineItem[]) => void;
+  isLoading?: boolean;
+  onRefresh?: () => void;
 }
 
 export interface TimelineState {
@@ -18,3 +20,5 @@ export interface TimelineState {
 }
 
 export type TimelineLane = TimelineItem[];
+
+
