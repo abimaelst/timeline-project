@@ -6,33 +6,3 @@ body {
   @apply bg-base-200;
 }
 
-@layer components {
-    .tooltip {
-        @apply overflow-visible;
-    }
-
-    .tooltip:before {
-        @apply whitespace-pre-line;
-        @apply max-w-xs;
-        @apply text-xs;
-        @apply py-2 px-3;
-        @apply leading-tight;
-        @apply z-[60];
-    }
-
-    .tooltip:after {
-        @apply z-[60];
-    }
-
-    .tooltip-info:before {
-        @apply bg-info text-info-content;
-    }
-
-    .tooltip-top:before {
-        transform: translateX(-50%) translateY(-0.25rem);
-    }
-
-    .tooltip-top:after {
-        transform: translateX(-50%) translateY(-0.25rem);
-    }
-}

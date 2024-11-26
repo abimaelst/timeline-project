@@ -92,6 +92,8 @@ export const Timeline: React.FC<TimelineProps> = ({ initialItems = [], onItemUpd
         <div
           ref={(node) => {
             if (node) {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
               containerRef.current = node;
               droppableRef(node);
             }
