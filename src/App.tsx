@@ -1,12 +1,13 @@
-import {Timeline} from "./components/Timeline.tsx";
+import { Timeline } from "./components/Timeline.tsx";
 
 function App() {
 
 
   return (
-    <div>
-        <Timeline />
-    </div>
+      <div>
+          <h1>Project Timeline</h1>
+          <Timeline />
+      </div>
 
   )
 }
