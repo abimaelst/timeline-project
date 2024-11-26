@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.2.0",
+    "@dnd-kit/modifiers": "^8.0.0",
     "axios": "^1.7.8",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.461.0",
